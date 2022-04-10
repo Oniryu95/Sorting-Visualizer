@@ -1,8 +1,9 @@
 import 'dart:html';
 import 'dart:math';
 import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:sorting/sorting/BubbleSort.dart';
+import 'package:sorting/sorting/MergeSort.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +18,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-
         primarySwatch: Colors.blue,
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
@@ -35,102 +35,76 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
-  List array = [5,10,17];
+  List _array = [5, 10, 17];
+  int _indexFirstValue = 0;
+  int _indexSecondValue = 0;
   bool isRunning = false;
-  int indexFirstValue = 0;
-  int indexSecondValue = 1;
 
   @override
   Widget build(BuildContext context) {
     var rng = Random();
 
+
+    void viewController(int i, int j, List array, bool newRunning) {
+      setState(() {
+        _indexFirstValue = i;
+        _indexSecondValue = j;
+        _array = array;
+        isRunning = newRunning;
+      });
+    }
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Column(
-        children: <Widget>[
-          Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: List.generate(array.length, (indexs){
-                return Container(
-                  margin: const EdgeInsets.all(1),
-                  alignment: Alignment.topCenter,
-                  color: (indexs == indexFirstValue || indexs == indexSecondValue) ? Colors.red : Colors.blue,
-                  width: 20,
-                  height: array[indexs],
-                );
-              })
-          ),
-          Slider(
-              value: array.length.toDouble(),
+        appBar: AppBar(
+          title: Text(widget.title),
+        ),
+        body: Column(
+          children: <Widget>[
+            SizedBox(
+              height: 300,
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: List.generate(_array.length, (index) {
+                    return Container(
+                      margin: const EdgeInsets.all(1),
+                      alignment: Alignment.topCenter,
+                      color: (index == _indexFirstValue ||
+                              index == _indexSecondValue)
+                          ? Colors.red
+                          : Colors.blue,
+                      width: 20,
+                      height: _array[index],
+                    );
+                  })),
+            ),
+            Slider(
+              value: _array.length.toDouble(),
               min: 2,
               max: 50,
-              onChanged: !isRunning ? (newValue){
-                setState(() {
-                  array = List<int>.generate(newValue.toInt(),(index) => rng.nextInt(250));
-                });
-              } : null,
-          ),
-          TextButton(onPressed: (){
-            isRunning = true;
-              Timer.periodic(Duration(milliseconds: 1000~/array.length), (timer) {
-                if(indexFirstValue == array.length){
-                  isRunning = false;
-                  timer.cancel();
-                  indexFirstValue = 0;
-                  indexSecondValue = 1;
-                }
-                else{
-                  if(indexSecondValue < array.length){
-                    singleBubbleSort(array, indexFirstValue,indexSecondValue++);
-                  }
-                  else{
-                    indexFirstValue++;
-                    indexSecondValue = indexFirstValue+1;
-                  }
-                }
-                setState(() {
-
-                });
-              });
-          }, child: const Text("BubbleSort"))
-        ],
-      )
-    );
+              onChanged: !isRunning
+                  ? (newValue) {
+                      setState(() {
+                        _array = List<int>.generate(
+                            newValue.toInt(), (index) => rng.nextInt(280) + 1);
+                      });
+                    }
+                  : null,
+            ),
+            TextButton(
+              onPressed: !isRunning ?() {
+                _indexFirstValue = _indexSecondValue = 0;
+                bubbleSort(_array, viewController);
+              }: null,
+              child: const Text("BubbleSort"),
+            ),
+            TextButton(
+                onPressed: !isRunning ? (){
+                  _indexFirstValue = _indexSecondValue = 0;
+                  mergeSort(_array, 0, _array.length, viewController);
+                } : null,
+                child: const Text("MergeSort"))
+          ],
+        ));
   }
 }
-
- void bubbleSort(List array){
-
-  int temp;
-
-  for(int i = 0; i < array.length;i++){
-
-    for(int j = i+1; j <array.length;j++){
-
-      if(array[j] < array[i]){
-
-        temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
-      }
-    }
-  }
- }
-
-void singleBubbleSort(List array,int indexFirstValue, int indexSecondValue){
-
-  int temp;
-
-  if(array[indexSecondValue] < array[indexFirstValue]){
-
-    temp = array[indexFirstValue];
-    array[indexFirstValue] = array[indexSecondValue];
-    array[indexSecondValue] = temp;
-  }
-}
-
-
