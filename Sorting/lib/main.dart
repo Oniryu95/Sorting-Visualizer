@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:sorting/sorting/BubbleSort.dart';
 import 'package:sorting/sorting/MergeSort.dart';
+import 'package:sorting/sorting/QuickSort.dart';
 
 void main() {
   runApp(const MyApp());
@@ -103,7 +104,14 @@ class _MyHomePageState extends State<MyHomePage> {
                   _indexFirstValue = _indexSecondValue = 0;
                   mergeSort(_array, 0, _array.length, viewController);
                 } : null,
-                child: const Text("MergeSort"))
+                child: const Text("MergeSort")
+            ),
+            TextButton(
+                onPressed: !isRunning ? (){
+                  _indexFirstValue = _indexSecondValue = 0;
+                  quickSort(_array, 0, _array.length-1, viewController);
+                } : null,
+                child: Text("QuickSort"))
           ],
         ));
   }
