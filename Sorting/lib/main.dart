@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:sorting/sorting/BubbleSort.dart';
 import 'package:sorting/sorting/MergeSort.dart';
 import 'package:sorting/sorting/QuickSort.dart';
+import 'package:sorting/sorting/BottomBar.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,9 +20,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.brown,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Sorting Visualizzer'),
     );
   }
 }
@@ -45,13 +46,20 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     var rng = Random();
 
-
     void viewController(int i, int j, List array, bool newRunning) {
       setState(() {
         _indexFirstValue = i;
         _indexSecondValue = j;
         _array = array;
         isRunning = newRunning;
+      });
+    }
+
+    void generateArray(double value){
+
+      setState(() {
+        _array = List<int>.generate(
+            value.toInt(), (index) => rng.nextInt(280) + 1);
       });
     }
 
@@ -67,51 +75,25 @@ class _MyHomePageState extends State<MyHomePage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: List.generate(_array.length, (index) {
-                    return Container(
+                    return AnimatedContainer(
                       margin: const EdgeInsets.all(1),
                       alignment: Alignment.topCenter,
                       color: (index == _indexFirstValue ||
                               index == _indexSecondValue)
-                          ? Colors.red
-                          : Colors.blue,
+                          ? Colors.brown
+                          : Colors.teal,
                       width: 20,
                       height: _array[index],
+                      duration: Duration(milliseconds: 200),
                     );
                   })),
             ),
-            Slider(
-              value: _array.length.toDouble(),
-              min: 2,
-              max: 50,
-              onChanged: !isRunning
-                  ? (newValue) {
-                      setState(() {
-                        _array = List<int>.generate(
-                            newValue.toInt(), (index) => rng.nextInt(280) + 1);
-                      });
-                    }
-                  : null,
+            BottomBar(
+              array: _array,
+              isRunning: isRunning,
+              generateArray: generateArray,
+              viewController: viewController,
             ),
-            TextButton(
-              onPressed: !isRunning ?() {
-                _indexFirstValue = _indexSecondValue = 0;
-                bubbleSort(_array, viewController);
-              }: null,
-              child: const Text("BubbleSort"),
-            ),
-            TextButton(
-                onPressed: !isRunning ? (){
-                  _indexFirstValue = _indexSecondValue = 0;
-                  mergeSort(_array, 0, _array.length, viewController);
-                } : null,
-                child: const Text("MergeSort")
-            ),
-            TextButton(
-                onPressed: !isRunning ? (){
-                  _indexFirstValue = _indexSecondValue = 0;
-                  quickSort(_array, 0, _array.length-1, viewController);
-                } : null,
-                child: Text("QuickSort"))
           ],
         ));
   }
