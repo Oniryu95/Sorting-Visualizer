@@ -1,15 +1,15 @@
-Future<void> mergeSort(List array, int indexFirsEl, int indexLastEl,Function viewController) async {
+Future<void> mergeSort(List array, int indexFirsEl, int indexLastEl,Function viewController,int speedAnimation) async {
   int half = ((indexFirsEl + indexLastEl) / 2).floor();
 
   if (half == indexFirsEl) {
     return;
   }
   viewController(indexFirsEl,half,array,true);
-  await Future.delayed(Duration(milliseconds: 1000 ~/ array.length));
-  await mergeSort(array, indexFirsEl, half,viewController);
+  await Future.delayed(Duration(milliseconds: speedAnimation ~/ array.length));
+  await mergeSort(array, indexFirsEl, half,viewController,speedAnimation);
   viewController(half,indexLastEl,array,true);
-  await Future.delayed(Duration(milliseconds: 1000 ~/ array.length));
-  await mergeSort(array, half, indexLastEl,viewController);
+  await Future.delayed(Duration(milliseconds: speedAnimation ~/ array.length));
+  await mergeSort(array, half, indexLastEl,viewController,speedAnimation);
 
   List leftPart = List.filled(half - indexFirsEl, 0, growable: false);
   List rightPart = List.filled(indexLastEl - half, 0, growable: false);
@@ -22,7 +22,7 @@ Future<void> mergeSort(List array, int indexFirsEl, int indexLastEl,Function vie
     rightPart[i] = array[half + i];
   }
 
-  await merge(array, leftPart, rightPart, indexFirsEl,indexLastEl,viewController);
+  await merge(array, leftPart, rightPart, indexFirsEl,indexLastEl,viewController,speedAnimation);
 
   if(leftPart.length+rightPart.length == array.length){
 
@@ -30,7 +30,7 @@ Future<void> mergeSort(List array, int indexFirsEl, int indexLastEl,Function vie
   }
 }
 
-Future<void> merge(List array, List leftPart, List rightPart, int indexFirsEl,int indexLastEl,Function viewController) async {
+Future<void> merge(List array, List leftPart, List rightPart, int indexFirsEl,int indexLastEl,Function viewController,int speedAnimation) async {
 
   int indexLef = 0;
   int indexRight = 0;
@@ -45,20 +45,20 @@ Future<void> merge(List array, List leftPart, List rightPart, int indexFirsEl,in
       viewController(indexFirsEl,indexFirsEl,array,true);
     }
 
-    await Future.delayed(Duration(milliseconds: 1000 ~/ array.length));
+    await Future.delayed(Duration(milliseconds: speedAnimation ~/ array.length));
   }
 
   if (indexLef != leftPart.length) {
     while (indexLef < leftPart.length) {
       array[indexFirsEl++] = leftPart[indexLef++];
       viewController(indexFirsEl,indexFirsEl,array,true);
-      await Future.delayed(Duration(milliseconds: 1000 ~/ array.length));
+      await Future.delayed(Duration(milliseconds: speedAnimation ~/ array.length));
     }
   } else if (indexRight != rightPart.length) {
     while (indexRight < rightPart.length) {
       array[indexFirsEl++] = rightPart[indexRight++];
       viewController(indexFirsEl,half++,array,true);
-      await Future.delayed(Duration(milliseconds: 1000 ~/ array.length));
+      await Future.delayed(Duration(milliseconds: speedAnimation ~/ array.length));
     }
   }
 }

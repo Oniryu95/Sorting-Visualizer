@@ -1,17 +1,16 @@
 import 'dart:math';
 
-int speed = 1500;
-Future<void> quickSort(List array,int firstIndex, int lastIndex,Function viewController) async{
+Future<void> quickSort(List array,int firstIndex, int lastIndex,Function viewController,int speedAnimation) async{
 
   if(firstIndex < lastIndex) {
 
-    int indexPivot = await partitionOrder(array, firstIndex, lastIndex, viewController);
+    int indexPivot = await partitionOrder(array, firstIndex, lastIndex, viewController,speedAnimation);
     viewController(firstIndex,indexPivot-1,array,true);
-    await Future.delayed(Duration(milliseconds: speed ~/ array.length));
-    await quickSort(array, firstIndex, indexPivot - 1, viewController);
+    await Future.delayed(Duration(milliseconds: speedAnimation ~/ array.length));
+    await quickSort(array, firstIndex, indexPivot - 1, viewController,speedAnimation);
     viewController(indexPivot+1,lastIndex,array,true);
-    await Future.delayed(Duration(milliseconds: speed ~/ array.length));
-    await quickSort(array, indexPivot + 1, lastIndex, viewController);
+    await Future.delayed(Duration(milliseconds: speedAnimation ~/ array.length));
+    await quickSort(array, indexPivot + 1, lastIndex, viewController,speedAnimation);
   }
 
   if(firstIndex > array.length-2){
@@ -20,7 +19,7 @@ Future<void> quickSort(List array,int firstIndex, int lastIndex,Function viewCon
   }
 }
 
-Future<int> partitionOrder(List array, int firstIndex, int lastIndex, Function viewController) async{
+Future<int> partitionOrder(List array, int firstIndex, int lastIndex, Function viewController,int speed) async{
 
   int indexSwap = firstIndex;
   int pivot = array[lastIndex];

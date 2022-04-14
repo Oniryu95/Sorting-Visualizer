@@ -1,9 +1,9 @@
-Future<void> bubbleSort(List array, Function viewController) async {
+Future<void> bubbleSort(List array, Function viewController,int speed) async {
   int temp;
 
   for (int i = 0; i < array.length; i++) {
     for (int j = i + 1; j < array.length; j++) {
-      await Future.delayed(Duration(milliseconds: 1000 ~/ array.length));
+      await Future.delayed(Duration(milliseconds: speed ~/ array.length));
 
       if (array[j] < array[i]) {
         temp = array[i];

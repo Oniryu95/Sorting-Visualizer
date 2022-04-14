@@ -1,10 +1,5 @@
-import 'dart:html';
 import 'dart:math';
-import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:sorting/sorting/BubbleSort.dart';
-import 'package:sorting/sorting/MergeSort.dart';
-import 'package:sorting/sorting/QuickSort.dart';
 import 'package:sorting/sorting/BottomBar.dart';
 
 void main() {
@@ -37,10 +32,12 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
   List _array = [5, 10, 17];
   int _indexFirstValue = 0;
   int _indexSecondValue = 0;
   bool isRunning = false;
+  int speedAnimation = 1000;
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +57,13 @@ class _MyHomePageState extends State<MyHomePage> {
       setState(() {
         _array = List<int>.generate(
             value.toInt(), (index) => rng.nextInt(280) + 1);
+      });
+    }
+
+    void speedChanger(int newSpeed){
+
+      setState(() {
+        speedAnimation = newSpeed;
       });
     }
 
@@ -84,7 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           : Colors.teal,
                       width: 20,
                       height: _array[index],
-                      duration: Duration(milliseconds: 200),
+                      duration: const Duration(milliseconds: 200),
                     );
                   })),
             ),
