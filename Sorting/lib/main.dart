@@ -1,6 +1,7 @@
+import 'dart:html';
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:sorting/sorting/BottomBar.dart';
+import 'package:sorting/widget/Body.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,7 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Sorting visualizer',
       theme: ThemeData(
         primarySwatch: Colors.brown,
       ),
@@ -33,72 +34,25 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
-  List _array = [5, 10, 17];
-  int _indexFirstValue = 0;
-  int _indexSecondValue = 0;
-  bool isRunning = false;
-  int speedAnimation = 1000;
+
 
   @override
   Widget build(BuildContext context) {
-    var rng = Random();
 
-    void viewController(int i, int j, List array, bool newRunning) {
-      setState(() {
-        _indexFirstValue = i;
-        _indexSecondValue = j;
-        _array = array;
-        isRunning = newRunning;
-      });
-    }
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
 
-    void generateArray(double value){
+        if(constraints.maxWidth > 1000){
 
-      setState(() {
-        _array = List<int>.generate(
-            value.toInt(), (index) => rng.nextInt(280) + 1);
-      });
-    }
+          return NormalBody(title: widget.title);
+        }
+        else{
 
-    void speedChanger(int newSpeed){
-
-      setState(() {
-        speedAnimation = newSpeed;
-      });
-    }
-
-    return Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-        ),
-        body: Column(
-          children: <Widget>[
-            SizedBox(
-              height: 300,
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: List.generate(_array.length, (index) {
-                    return AnimatedContainer(
-                      margin: const EdgeInsets.all(1),
-                      alignment: Alignment.topCenter,
-                      color: (index == _indexFirstValue ||
-                              index == _indexSecondValue)
-                          ? Colors.brown
-                          : Colors.teal,
-                      width: 20,
-                      height: _array[index],
-                      duration: const Duration(milliseconds: 200),
-                    );
-                  })),
-            ),
-            BottomBar(
-              array: _array,
-              isRunning: isRunning,
-              generateArray: generateArray,
-              viewController: viewController,
-            ),
-          ],
-        ));
+          return TinyBody(title: widget.title);
+        }
+      },
+    );
   }
 }
+
+//TODO:Change container's height in TinyBody
