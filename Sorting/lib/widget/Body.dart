@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sorting/widget/BottomBar.dart';
 
@@ -16,8 +17,9 @@ class _NormalBodyState extends State<NormalBody> {
   List _array = [5, 10, 17];
   int _indexFirstValue = 0;
   int _indexSecondValue = 0;
-  bool _isRunning = false;
-  int _passCounter = 0;
+  bool isRunning = false;
+  int speedAnimation = 1000;
+  int passCounter = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -28,13 +30,13 @@ class _NormalBodyState extends State<NormalBody> {
         _indexFirstValue = i;
         _indexSecondValue = j;
         _array = array;
-        _isRunning = newRunning;
-        _passCounter++;
+        isRunning = newRunning;
+        passCounter++;
       });
     }
 
     void passChanger(int newPassVal){
-      setState((){_passCounter = newPassVal;
+      setState((){passCounter = newPassVal;
       });
     }
 
@@ -43,6 +45,13 @@ class _NormalBodyState extends State<NormalBody> {
       setState(() {
         _array = List<int>.generate(
             value.toInt(), (index) => rng.nextInt(280) + 1);
+      });
+    }
+
+    void speedChanger(int newSpeed){
+
+      setState(() {
+        speedAnimation = newSpeed;
       });
     }
 
@@ -75,10 +84,10 @@ class _NormalBodyState extends State<NormalBody> {
                 flex: 3,
                 child: BottomBar(
                   array: _array,
-                  isRunning: _isRunning,
+                  isRunning: isRunning,
                   generateArray: generateArray,
                   viewController: viewController,
-                  passCounter: _passCounter,
+                  passCounter: passCounter,
                   passChanger: passChanger,
                 )
             ),
@@ -102,6 +111,7 @@ class _TinyBodyState extends State<TinyBody> {
   int _indexFirstValue = 0;
   int _indexSecondValue = 0;
   bool isRunning = false;
+  int speedAnimation = 1000;
   int passCounter = 0;
 
   @override
@@ -127,7 +137,14 @@ class _TinyBodyState extends State<TinyBody> {
 
       setState(() {
         _array = List<int>.generate(
-            value.toInt(), (index) => (rng.nextInt(280) + 1));
+            value.toInt(), (index) => rng.nextInt(280) + 1);
+      });
+    }
+
+    void speedChanger(int newSpeed){
+
+      setState(() {
+        speedAnimation = newSpeed;
       });
     }
 
@@ -138,7 +155,7 @@ class _TinyBodyState extends State<TinyBody> {
         body: Column(
           children: <Widget>[
             Expanded(
-              flex: 2,
+              flex: 3,
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -151,13 +168,13 @@ class _TinyBodyState extends State<TinyBody> {
                           ? Colors.brown
                           : Colors.teal,
                       width: 10,
-                      height: _array[index]/2,
+                      height: _array[index],
                       duration: const Duration(milliseconds: 200),
                     );
                   })),
             ),
             Expanded(
-                flex: 3,
+                flex: 2,
                 child: BottomBar(
                   array: _array,
                   isRunning: isRunning,

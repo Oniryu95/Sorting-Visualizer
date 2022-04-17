@@ -42,7 +42,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
 
-        if(constraints.maxWidth > 1100){
+        if(constraints.maxWidth > 1000){
 
           return NormalBody(title: widget.title);
         }
@@ -54,3 +54,5 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+
+//TODO:Change container's height in TinyBody
